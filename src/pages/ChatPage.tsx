@@ -60,14 +60,17 @@ const ChatPage = () => {
 
   useEffect(() => {
     if (courseId && user) {
+      console.log('Initializing chat for course:', courseId, 'user:', user.id);
       loadCourseData(courseId);
       setCurrentCourse(courseId);
       setCurrentUser(user.id);
       
       // Create initial conversation if none exists
       if (!currentConversationId) {
+        console.log('No current conversation, creating one...');
         const newId = createConversation(courseId, user.id);
         setCurrentConversation(newId);
+        console.log('Created conversation:', newId);
       }
     }
   }, [courseId, user?.id]);
@@ -92,7 +95,17 @@ const ChatPage = () => {
   };
 
   const handleSendMessage = async (content: string) => {
-    if (!courseId || isStreaming) return;
+    if (!courseId || isStreaming || !user) return;
+
+    // Ensure we have a conversation
+    if (!currentConversationId) {
+      console.log('Creating new conversation...');
+      setCurrentUser(user.id);
+      const newId = createConversation(courseId, user.id);
+      setCurrentConversation(newId);
+      // Wait a bit for state to update
+      await new Promise(resolve => setTimeout(resolve, 100));
+    }
 
     const userMessage: Message = {
       id: `msg-${Date.now()}`,
@@ -101,11 +114,13 @@ const ChatPage = () => {
       timestamp: new Date(),
     };
 
+    console.log('Adding user message:', userMessage);
     addMessage(userMessage);
     setIsStreaming(true);
 
     try {
       const response = await sendMessage(courseId, content);
+      console.log('Adding AI response:', response);
       addMessage(response);
     } catch (error) {
       console.error('Failed to send message:', error);
