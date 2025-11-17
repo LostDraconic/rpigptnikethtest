@@ -92,3 +92,11 @@ export const getTeacherCourses = async (teacherId: string): Promise<Course[]> =>
   // Return all courses for demo
   return mockCourses;
 };
+
+export const deleteCourse = async (courseId: string): Promise<void> => {
+  await delay(400);
+  const index = mockCourses.findIndex((c) => c.id === courseId);
+  if (index !== -1) {
+    mockCourses.splice(index, 1);
+  }
+};

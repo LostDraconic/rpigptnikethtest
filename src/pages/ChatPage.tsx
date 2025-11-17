@@ -138,13 +138,14 @@ const ChatPage = () => {
                 ))
               )}
               {isStreaming && (
-                <div className="flex gap-2 mb-6">
-                  <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center">
-                    <div className="flex gap-1">
-                      <div className="w-2 h-2 bg-primary-foreground rounded-full animate-pulse" />
-                      <div className="w-2 h-2 bg-primary-foreground rounded-full animate-pulse delay-100" />
-                      <div className="w-2 h-2 bg-primary-foreground rounded-full animate-pulse delay-200" />
-                    </div>
+                <div className="flex gap-3 mb-6 animate-fade-in">
+                  <div className="w-9 h-9 rounded-md bg-primary flex items-center justify-center flex-shrink-0">
+                    <span className="text-sm font-bold text-primary-foreground">AI</span>
+                  </div>
+                  <div className="flex items-center gap-1 mt-2">
+                    <div className="w-2 h-2 bg-muted-foreground rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
+                    <div className="w-2 h-2 bg-muted-foreground rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
+                    <div className="w-2 h-2 bg-muted-foreground rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
                   </div>
                 </div>
               )}

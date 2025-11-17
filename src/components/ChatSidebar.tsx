@@ -1,17 +1,20 @@
-import { Plus, Upload } from 'lucide-react';
+import { Plus, Upload, Search } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 import { useChatStore } from '@/store/useChatStore';
 import { useCourseStore } from '@/store/useCourseStore';
 import { useAuthStore } from '@/store/useAuthStore';
 import { useNavigate } from 'react-router-dom';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { format } from 'date-fns';
+import { useState } from 'react';
 
 export const ChatSidebar = () => {
   const { conversations, clearMessages, currentCourseId } = useChatStore();
   const { selectedCourse } = useCourseStore();
   const { isProfessor } = useAuthStore();
   const navigate = useNavigate();
+  const [searchTerm, setSearchTerm] = useState('');
 
   const handleNewChat = () => {
     if (currentCourseId) {
@@ -25,8 +28,12 @@ export const ChatSidebar = () => {
     }
   };
 
+  const filteredConversations = conversations.filter((conv) =>
+    conv.title.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
   return (
-    <div className="w-64 bg-chat-sidebar-bg text-chat-sidebar-fg flex flex-col h-screen border-r border-chat-sidebar-hover">
+    <div className="w-64 bg-chat-sidebar-bg text-chat-sidebar-fg flex flex-col h-full border-r border-chat-sidebar-hover">
       <div className="p-4 space-y-2">
         <Button
           onClick={handleNewChat}
@@ -59,19 +66,37 @@ export const ChatSidebar = () => {
         </div>
       )}
 
+      <div className="px-4 py-3 border-b border-chat-sidebar-hover">
+        <div className="relative">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-chat-sidebar-fg/60" />
+          <Input
+            placeholder="Search conversations..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="pl-9 bg-chat-sidebar-hover/50 border-chat-sidebar-hover text-chat-sidebar-fg placeholder:text-chat-sidebar-fg/40"
+          />
+        </div>
+      </div>
+
       <ScrollArea className="flex-1">
         <div className="p-2 space-y-1">
-          {conversations.map((conv) => (
-            <button
-              key={conv.id}
-              className="w-full text-left px-3 py-2 rounded hover:bg-chat-sidebar-hover transition-colors text-sm"
-            >
-              <div className="font-medium truncate">{conv.title}</div>
-              <div className="text-xs text-chat-sidebar-fg/60">
-                {format(new Date(conv.lastMessage), 'MM/dd/yyyy')}
-              </div>
-            </button>
-          ))}
+          {filteredConversations.length === 0 ? (
+            <div className="text-center text-xs text-chat-sidebar-fg/40 py-4">
+              {searchTerm ? 'No conversations found' : 'No conversations yet'}
+            </div>
+          ) : (
+            filteredConversations.map((conv) => (
+              <button
+                key={conv.id}
+                className="w-full text-left px-3 py-2 rounded hover:bg-chat-sidebar-hover transition-colors text-sm"
+              >
+                <div className="font-medium truncate">{conv.title}</div>
+                <div className="text-xs text-chat-sidebar-fg/60">
+                  {format(new Date(conv.lastMessage), 'MM/dd/yyyy')}
+                </div>
+              </button>
+            ))
+          )}
         </div>
       </ScrollArea>
     </div>
