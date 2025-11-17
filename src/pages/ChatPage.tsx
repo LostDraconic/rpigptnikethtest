@@ -238,11 +238,13 @@ const ChatPage = () => {
 
         <div className="flex-1 flex flex-col">
           <div className="h-16 border-b px-6 flex items-center justify-between bg-background">
-            <div>
-              <h2 className="font-bold text-lg">{selectedCourse.code} - {selectedCourse.name}</h2>
-              <p className="text-sm text-muted-foreground">{selectedCourse.professor}</p>
+            <div className="flex items-baseline gap-3">
+              <h2 className="font-bold text-xl">{selectedCourse.code}</h2>
+              <span className="text-lg text-muted-foreground">•</span>
+              <h3 className="font-semibold text-lg">{selectedCourse.name}</h3>
             </div>
-            <div className="flex items-center gap-2">
+            <p className="text-sm text-muted-foreground">{selectedCourse.professor}</p>
+            <div className="flex items-center gap-2 ml-auto">
               <Button
                 variant="ghost"
                 size="sm"

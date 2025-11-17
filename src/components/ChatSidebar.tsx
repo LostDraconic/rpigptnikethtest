@@ -44,7 +44,7 @@ export const ChatSidebar = () => {
   );
 
   return (
-    <div className="w-64 bg-chat-sidebar-bg text-chat-sidebar-fg flex flex-col h-full border-r border-chat-sidebar-hover">
+    <div className="w-64 bg-chat-sidebar-bg text-chat-sidebar-fg flex flex-col min-h-screen border-r border-chat-sidebar-hover">
       <div className="p-4 space-y-2">
         <Button
           onClick={handleNewChat}
