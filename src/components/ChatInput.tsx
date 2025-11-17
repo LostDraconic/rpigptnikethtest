@@ -35,7 +35,7 @@ export const ChatInput = ({ onSend, disabled }: ChatInputProps) => {
             type="button"
             variant="ghost"
             size="icon"
-            className="mb-2"
+            className="mb-2 transition-all hover:scale-110"
             disabled={disabled}
           >
             <Paperclip className="w-5 h-5" />
@@ -45,13 +45,16 @@ export const ChatInput = ({ onSend, disabled }: ChatInputProps) => {
             onChange={(e) => setMessage(e.target.value)}
             onKeyDown={handleKeyDown}
             placeholder="Message RPI GPT..."
-            className="min-h-[60px] max-h-[200px] resize-none"
+            className="min-h-[60px] max-h-[200px] resize-none transition-all focus:ring-2 focus:ring-primary/50"
             disabled={disabled}
           />
           <Button
             type="submit"
             size="icon"
-            className="mb-2"
+            className={cn(
+              "mb-2 transition-all hover:scale-110",
+              message.trim() && !disabled && "animate-pulse"
+            )}
             disabled={disabled || !message.trim()}
           >
             <Send className="w-5 h-5" />

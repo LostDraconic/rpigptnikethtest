@@ -70,10 +70,10 @@ const Login = () => {
               onClick={() => handleLogin('student')}
               disabled={loading}
               size="lg"
-              className="w-full gap-2"
+              className="w-full gap-2 transition-all hover:scale-105"
             >
               <Lock className="w-4 h-4" />
-              Sign in as Student
+              {loading ? 'Signing in...' : 'Sign in as Student'}
             </Button>
 
             <Button
@@ -81,10 +81,10 @@ const Login = () => {
               disabled={loading}
               size="lg"
               variant="outline"
-              className="w-full gap-2"
+              className="w-full gap-2 transition-all hover:scale-105"
             >
               <Lock className="w-4 h-4" />
-              Sign in as Professor
+              {loading ? 'Signing in...' : 'Sign in as Professor'}
             </Button>
           </div>
 

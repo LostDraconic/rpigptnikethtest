@@ -1,17 +1,20 @@
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Header } from '@/components/Header';
 import { CourseCard } from '@/components/CourseCard';
 import { Input } from '@/components/ui/input';
-import { Search } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Search, ArrowLeft } from 'lucide-react';
 import { getCourseList } from '@/api/courses';
 import { useCourseStore } from '@/store/useCourseStore';
 import { useAuthStore } from '@/store/useAuthStore';
 
 const Dashboard = () => {
+  const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState('');
   const [loading, setLoading] = useState(true);
   const { courses, setCourses } = useCourseStore();
-  const { user } = useAuthStore();
+  const { user, isProfessor } = useAuthStore();
 
   useEffect(() => {
     loadCourses();
@@ -41,8 +44,19 @@ const Dashboard = () => {
       
       <main className="max-w-7xl mx-auto p-6 space-y-8">
         <div className="animate-fade-in">
+          {isProfessor() && (
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => navigate('/professor')}
+              className="mb-4 hover:bg-primary/10 transition-colors"
+            >
+              <ArrowLeft className="w-4 h-4 mr-2" />
+              Back to Professor Dashboard
+            </Button>
+          )}
           <h2 className="text-3xl font-bold mb-2">
-            Welcome back, {user?.name?.split(' ')[0]}
+            Welcome back, {user?.name}
           </h2>
           <p className="text-muted-foreground">
             Select a course to start chatting with your AI assistant
