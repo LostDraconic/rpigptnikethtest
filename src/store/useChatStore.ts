@@ -29,12 +29,16 @@ interface ChatState {
   conversationsByCourse: Record<string, Conversation[]>;
   currentConversationId: string | null;
   currentCourseId: string | null;
+  currentUserId: string | null;
   isStreaming: boolean;
   selectedTags: MessageTag[];
   
+  // User management
+  setCurrentUser: (userId: string) => void;
+  
   // Conversation management
-  getConversations: (courseId: string) => Conversation[];
-  createConversation: (courseId: string, title?: string) => string;
+  getConversations: (courseId: string, userId: string) => Conversation[];
+  createConversation: (courseId: string, userId: string, title?: string) => string;
   renameConversation: (conversationId: string, title: string) => void;
   deleteConversation: (conversationId: string) => void;
   setCurrentConversation: (id: string | null) => void;
@@ -61,13 +65,20 @@ export const useChatStore = create<ChatState>((set, get) => ({
   conversationsByCourse: {},
   currentConversationId: null,
   currentCourseId: null,
+  currentUserId: null,
   isStreaming: false,
   selectedTags: [],
   
-  getConversations: (courseId) => get().conversationsByCourse[courseId] || [],
+  setCurrentUser: (userId) => set({ currentUserId: userId }),
   
-  createConversation: (courseId, title) => {
-    const id = `conv-${Date.now()}`;
+  getConversations: (courseId, userId) => {
+    const key = `${courseId}-${userId}`;
+    return get().conversationsByCourse[key] || [];
+  },
+  
+  createConversation: (courseId, userId, title) => {
+    const id = `conv-${Date.now()}-${userId}`;
+    const key = `${courseId}-${userId}`;
     const newConv: Conversation = {
       id,
       title: title || 'New Chat',
@@ -79,7 +90,7 @@ export const useChatStore = create<ChatState>((set, get) => ({
     set((state) => ({
       conversationsByCourse: {
         ...state.conversationsByCourse,
-        [courseId]: [...(state.conversationsByCourse[courseId] || []), newConv],
+        [key]: [...(state.conversationsByCourse[key] || []), newConv],
       },
       currentConversationId: id,
     }));
@@ -88,10 +99,11 @@ export const useChatStore = create<ChatState>((set, get) => ({
   },
   
   renameConversation: (conversationId, title) => {
-    const { conversationsByCourse, currentCourseId } = get();
-    if (!currentCourseId) return;
+    const { conversationsByCourse, currentCourseId, currentUserId } = get();
+    if (!currentCourseId || !currentUserId) return;
     
-    const conversations = conversationsByCourse[currentCourseId] || [];
+    const key = `${currentCourseId}-${currentUserId}`;
+    const conversations = conversationsByCourse[key] || [];
     const updated = conversations.map((conv) =>
       conv.id === conversationId ? { ...conv, title } : conv
     );
@@ -99,23 +111,24 @@ export const useChatStore = create<ChatState>((set, get) => ({
     set((state) => ({
       conversationsByCourse: {
         ...state.conversationsByCourse,
-        [currentCourseId]: updated,
+        [key]: updated,
       },
     }));
   },
   
   deleteConversation: (conversationId) => {
-    const { conversationsByCourse, currentCourseId, currentConversationId } = get();
-    if (!currentCourseId) return;
+    const { conversationsByCourse, currentCourseId, currentUserId, currentConversationId } = get();
+    if (!currentCourseId || !currentUserId) return;
     
-    const conversations = (conversationsByCourse[currentCourseId] || []).filter(
+    const key = `${currentCourseId}-${currentUserId}`;
+    const conversations = (conversationsByCourse[key] || []).filter(
       (conv) => conv.id !== conversationId
     );
     
     set((state) => ({
       conversationsByCourse: {
         ...state.conversationsByCourse,
-        [currentCourseId]: conversations,
+        [key]: conversations,
       },
       currentConversationId:
         currentConversationId === conversationId ? null : currentConversationId,
@@ -146,10 +159,11 @@ export const useChatStore = create<ChatState>((set, get) => ({
   },
   
   addMessage: (message) => {
-    const { conversationsByCourse, currentCourseId, currentConversationId } = get();
-    if (!currentCourseId || !currentConversationId) return;
+    const { conversationsByCourse, currentCourseId, currentUserId, currentConversationId } = get();
+    if (!currentCourseId || !currentUserId || !currentConversationId) return;
     
-    const conversations = conversationsByCourse[currentCourseId] || [];
+    const key = `${currentCourseId}-${currentUserId}`;
+    const conversations = conversationsByCourse[key] || [];
     const updated = conversations.map((conv) =>
       conv.id === currentConversationId
         ? {
@@ -166,16 +180,17 @@ export const useChatStore = create<ChatState>((set, get) => ({
     set((state) => ({
       conversationsByCourse: {
         ...state.conversationsByCourse,
-        [currentCourseId]: updated,
+        [key]: updated,
       },
     }));
   },
   
   updateMessage: (messageId, updates) => {
-    const { conversationsByCourse, currentCourseId, currentConversationId } = get();
-    if (!currentCourseId || !currentConversationId) return;
+    const { conversationsByCourse, currentCourseId, currentUserId, currentConversationId } = get();
+    if (!currentCourseId || !currentUserId || !currentConversationId) return;
     
-    const conversations = conversationsByCourse[currentCourseId] || [];
+    const key = `${currentCourseId}-${currentUserId}`;
+    const conversations = conversationsByCourse[key] || [];
     const updated = conversations.map((conv) =>
       conv.id === currentConversationId
         ? {
@@ -190,16 +205,17 @@ export const useChatStore = create<ChatState>((set, get) => ({
     set((state) => ({
       conversationsByCourse: {
         ...state.conversationsByCourse,
-        [currentCourseId]: updated,
+        [key]: updated,
       },
     }));
   },
   
   deleteMessage: (messageId) => {
-    const { conversationsByCourse, currentCourseId, currentConversationId } = get();
-    if (!currentCourseId || !currentConversationId) return;
+    const { conversationsByCourse, currentCourseId, currentUserId, currentConversationId } = get();
+    if (!currentCourseId || !currentUserId || !currentConversationId) return;
     
-    const conversations = conversationsByCourse[currentCourseId] || [];
+    const key = `${currentCourseId}-${currentUserId}`;
+    const conversations = conversationsByCourse[key] || [];
     const updated = conversations.map((conv) =>
       conv.id === currentConversationId
         ? {
@@ -212,16 +228,17 @@ export const useChatStore = create<ChatState>((set, get) => ({
     set((state) => ({
       conversationsByCourse: {
         ...state.conversationsByCourse,
-        [currentCourseId]: updated,
+        [key]: updated,
       },
     }));
   },
   
   togglePinMessage: (messageId) => {
-    const { conversationsByCourse, currentCourseId, currentConversationId } = get();
-    if (!currentCourseId || !currentConversationId) return;
+    const { conversationsByCourse, currentCourseId, currentUserId, currentConversationId } = get();
+    if (!currentCourseId || !currentUserId || !currentConversationId) return;
     
-    const conversations = conversationsByCourse[currentCourseId] || [];
+    const key = `${currentCourseId}-${currentUserId}`;
+    const conversations = conversationsByCourse[key] || [];
     const updated = conversations.map((conv) =>
       conv.id === currentConversationId
         ? {
@@ -236,16 +253,17 @@ export const useChatStore = create<ChatState>((set, get) => ({
     set((state) => ({
       conversationsByCourse: {
         ...state.conversationsByCourse,
-        [currentCourseId]: updated,
+        [key]: updated,
       },
     }));
   },
   
   addMessageTag: (messageId, tag) => {
-    const { conversationsByCourse, currentCourseId, currentConversationId } = get();
-    if (!currentCourseId || !currentConversationId) return;
+    const { conversationsByCourse, currentCourseId, currentUserId, currentConversationId } = get();
+    if (!currentCourseId || !currentUserId || !currentConversationId) return;
     
-    const conversations = conversationsByCourse[currentCourseId] || [];
+    const key = `${currentCourseId}-${currentUserId}`;
+    const conversations = conversationsByCourse[key] || [];
     const updated = conversations.map((conv) =>
       conv.id === currentConversationId
         ? {
@@ -262,16 +280,17 @@ export const useChatStore = create<ChatState>((set, get) => ({
     set((state) => ({
       conversationsByCourse: {
         ...state.conversationsByCourse,
-        [currentCourseId]: updated,
+        [key]: updated,
       },
     }));
   },
   
   removeMessageTag: (messageId, tag) => {
-    const { conversationsByCourse, currentCourseId, currentConversationId } = get();
-    if (!currentCourseId || !currentConversationId) return;
+    const { conversationsByCourse, currentCourseId, currentUserId, currentConversationId } = get();
+    if (!currentCourseId || !currentUserId || !currentConversationId) return;
     
-    const conversations = conversationsByCourse[currentCourseId] || [];
+    const key = `${currentCourseId}-${currentUserId}`;
+    const conversations = conversationsByCourse[key] || [];
     const updated = conversations.map((conv) =>
       conv.id === currentConversationId
         ? {
@@ -288,7 +307,7 @@ export const useChatStore = create<ChatState>((set, get) => ({
     set((state) => ({
       conversationsByCourse: {
         ...state.conversationsByCourse,
-        [currentCourseId]: updated,
+        [key]: updated,
       },
     }));
   },

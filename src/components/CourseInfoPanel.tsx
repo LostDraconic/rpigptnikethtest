@@ -1,35 +1,149 @@
-import { Book, User, Clock, FileText, Bell } from 'lucide-react';
+import { useState } from 'react';
+import { Book, User, Clock, Bell, Edit2 } from 'lucide-react';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Separator } from '@/components/ui/separator';
-import { Badge } from '@/components/ui/badge';
 import { Course } from '@/store/useCourseStore';
+import { Button } from '@/components/ui/button';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
+import { useAuthStore } from '@/store/useAuthStore';
+import { useCourseStore } from '@/store/useCourseStore';
+import { useToast } from '@/hooks/use-toast';
 
 interface CourseInfoPanelProps {
   course: Course;
 }
 
 export const CourseInfoPanel = ({ course }: CourseInfoPanelProps) => {
-  // Mock data for demo
-  const officeHours = 'Tuesday & Thursday, 2:00 PM - 4:00 PM';
-  const textbooks = [
-    'Introduction to Algorithms (3rd Edition)',
-    'Data Structures and Algorithm Analysis in C++',
-  ];
-  const uploadedFiles = [
-    { name: 'Syllabus.pdf', date: '2025-11-01' },
-    { name: 'Lecture 1 - Introduction.pdf', date: '2025-11-05' },
-    { name: 'Assignment 1.pdf', date: '2025-11-08' },
-  ];
-  const announcements = [
-    { title: 'Midterm scheduled for Nov 25', date: '2025-11-10' },
-    { title: 'Office hours cancelled this week', date: '2025-11-08' },
-  ];
+  const { isProfessor } = useAuthStore();
+  const { updateCourse } = useCourseStore();
+  const { toast } = useToast();
+  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
+  const [editData, setEditData] = useState({
+    officeHours: course.officeHours || '',
+    textbooks: course.textbooks?.join('\n') || '',
+  });
+  const [announcements, setAnnouncements] = useState(course.announcements || []);
+  const [newAnnouncement, setNewAnnouncement] = useState({ title: '', date: '' });
+
+  const handleSave = () => {
+    updateCourse(course.id, {
+      officeHours: editData.officeHours,
+      textbooks: editData.textbooks.split('\n').filter(Boolean),
+      announcements,
+    });
+    toast({
+      title: 'Course info updated',
+      description: 'Changes have been saved successfully',
+    });
+    setIsEditDialogOpen(false);
+  };
+
+  const officeHours = course.officeHours || 'Not set';
+  const textbooks = course.textbooks || [];
+  const currentAnnouncements = course.announcements || [];
 
   return (
     <div className="w-80 border-l bg-muted/30 flex flex-col h-full">
-      <div className="p-4 border-b">
-        <h3 className="font-bold text-lg">{course.code}</h3>
-        <p className="text-sm text-muted-foreground">{course.name}</p>
+      <div className="p-4 border-b flex items-center justify-between">
+        <div>
+          <h3 className="font-bold text-lg">{course.code}</h3>
+          <p className="text-sm text-muted-foreground">{course.name}</p>
+        </div>
+        {isProfessor() && (
+          <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
+            <DialogTrigger asChild>
+              <Button variant="ghost" size="icon">
+                <Edit2 className="w-4 h-4" />
+              </Button>
+            </DialogTrigger>
+            <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto">
+              <DialogHeader>
+                <DialogTitle>Edit Course Information</DialogTitle>
+              </DialogHeader>
+              <div className="space-y-4">
+                <div className="space-y-2">
+                  <Label htmlFor="officeHours">Office Hours</Label>
+                  <Input
+                    id="officeHours"
+                    placeholder="e.g., Tuesday & Thursday, 2:00 PM - 4:00 PM"
+                    value={editData.officeHours}
+                    onChange={(e) => setEditData({ ...editData, officeHours: e.target.value })}
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="textbooks">Required Textbooks (one per line)</Label>
+                  <Textarea
+                    id="textbooks"
+                    placeholder="Enter textbooks..."
+                    value={editData.textbooks}
+                    onChange={(e) => setEditData({ ...editData, textbooks: e.target.value })}
+                    rows={4}
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label>Announcements</Label>
+                  <div className="space-y-2">
+                    {announcements.map((ann, index) => (
+                      <div key={index} className="flex items-center gap-2 p-2 bg-muted rounded">
+                        <div className="flex-1">
+                          <p className="text-sm font-medium">{ann.title}</p>
+                          <p className="text-xs text-muted-foreground">{ann.date}</p>
+                        </div>
+                        <Button
+                          type="button"
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => setAnnouncements(announcements.filter((_, i) => i !== index))}
+                        >
+                          Remove
+                        </Button>
+                      </div>
+                    ))}
+                    <div className="flex gap-2">
+                      <Input
+                        placeholder="Announcement title"
+                        value={newAnnouncement.title}
+                        onChange={(e) => setNewAnnouncement({ ...newAnnouncement, title: e.target.value })}
+                      />
+                      <Input
+                        type="date"
+                        value={newAnnouncement.date}
+                        onChange={(e) => setNewAnnouncement({ ...newAnnouncement, date: e.target.value })}
+                        className="w-40"
+                      />
+                      <Button
+                        type="button"
+                        variant="outline"
+                        onClick={() => {
+                          if (newAnnouncement.title && newAnnouncement.date) {
+                            setAnnouncements([...announcements, newAnnouncement]);
+                            setNewAnnouncement({ title: '', date: '' });
+                          }
+                        }}
+                      >
+                        Add
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="flex gap-2 justify-end">
+                  <Button variant="outline" onClick={() => setIsEditDialogOpen(false)}>
+                    Cancel
+                  </Button>
+                  <Button onClick={handleSave}>
+                    Save Changes
+                  </Button>
+                </div>
+              </div>
+            </DialogContent>
+          </Dialog>
+        )}
       </div>
 
       <ScrollArea className="flex-1">
@@ -63,36 +177,17 @@ export const CourseInfoPanel = ({ course }: CourseInfoPanelProps) => {
               <Book className="w-4 h-4 text-primary" />
               <h4 className="font-semibold text-sm">Required Textbooks</h4>
             </div>
-            <ul className="space-y-2">
-              {textbooks.map((book, index) => (
-                <li key={index} className="text-sm pl-4 border-l-2 border-primary/30">
-                  {book}
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          <Separator />
-
-          {/* Uploaded Files */}
-          <div>
-            <div className="flex items-center gap-2 mb-2">
-              <FileText className="w-4 h-4 text-primary" />
-              <h4 className="font-semibold text-sm">Course Materials</h4>
-            </div>
-            <ul className="space-y-2">
-              {uploadedFiles.map((file, index) => (
-                <li
-                  key={index}
-                  className="text-sm flex items-center justify-between p-2 rounded hover:bg-muted cursor-pointer"
-                >
-                  <span className="truncate">{file.name}</span>
-                  <span className="text-xs text-muted-foreground ml-2 flex-shrink-0">
-                    {file.date}
-                  </span>
-                </li>
-              ))}
-            </ul>
+            {textbooks.length > 0 ? (
+              <ul className="space-y-2">
+                {textbooks.map((book, index) => (
+                  <li key={index} className="text-sm pl-4 border-l-2 border-primary/30">
+                    {book}
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p className="text-sm text-muted-foreground">No textbooks listed</p>
+            )}
           </div>
 
           <Separator />
@@ -103,19 +198,23 @@ export const CourseInfoPanel = ({ course }: CourseInfoPanelProps) => {
               <Bell className="w-4 h-4 text-primary" />
               <h4 className="font-semibold text-sm">Announcements</h4>
             </div>
-            <div className="space-y-2">
-              {announcements.map((announcement, index) => (
-                <div
-                  key={index}
-                  className="p-2 rounded bg-primary/5 border border-primary/20"
-                >
-                  <p className="text-sm font-medium">{announcement.title}</p>
-                  <p className="text-xs text-muted-foreground">
-                    {announcement.date}
-                  </p>
-                </div>
-              ))}
-            </div>
+            {currentAnnouncements.length > 0 ? (
+              <div className="space-y-2">
+                {currentAnnouncements.map((announcement, index) => (
+                  <div
+                    key={index}
+                    className="p-2 rounded bg-primary/5 border border-primary/20"
+                  >
+                    <p className="text-sm font-medium">{announcement.title}</p>
+                    <p className="text-xs text-muted-foreground">
+                      {announcement.date}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <p className="text-sm text-muted-foreground">No announcements</p>
+            )}
           </div>
         </div>
       </ScrollArea>
