@@ -9,13 +9,13 @@ import { useToast } from '@/hooks/use-toast';
 import { UserRole } from '@/store/useAuthStore';
 
 const Login = () => {
-  const [loading, setLoading] = useState(false);
+  const [loadingRole, setLoadingRole] = useState<'student' | 'professor' | null>(null);
   const navigate = useNavigate();
   const { login } = useAuthStore();
   const { toast } = useToast();
 
   const handleLogin = async (role: UserRole) => {
-    setLoading(true);
+    setLoadingRole(role);
     try {
       const user = await loginWithSSO(role);
       login(user);
@@ -37,7 +37,7 @@ const Login = () => {
         variant: 'destructive',
       });
     } finally {
-      setLoading(false);
+      setLoadingRole(null);
     }
   };
 
@@ -68,23 +68,23 @@ const Login = () => {
           <div className="space-y-3">
             <Button
               onClick={() => handleLogin('student')}
-              disabled={loading}
+              disabled={loadingRole !== null}
               size="lg"
               className="w-full gap-2 transition-all hover:scale-105"
             >
               <Lock className="w-4 h-4" />
-              {loading ? 'Signing in...' : 'Sign in as Student'}
+              {loadingRole === 'student' ? 'Signing in...' : 'Sign in as Student'}
             </Button>
 
             <Button
               onClick={() => handleLogin('professor')}
-              disabled={loading}
+              disabled={loadingRole !== null}
               size="lg"
               variant="outline"
               className="w-full gap-2 transition-all hover:scale-105"
             >
               <Lock className="w-4 h-4" />
-              {loading ? 'Signing in...' : 'Sign in as Professor'}
+              {loadingRole === 'professor' ? 'Signing in...' : 'Sign in as Professor'}
             </Button>
           </div>
 

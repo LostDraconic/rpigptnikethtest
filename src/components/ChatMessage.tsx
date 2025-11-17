@@ -40,30 +40,30 @@ export const ChatMessage = ({ message }: ChatMessageProps) => {
   return (
     <div
       className={cn(
-        'flex gap-4 mb-6 animate-fade-in',
+        'flex gap-3 mb-6 animate-fade-in',
         isAI ? 'justify-start' : 'justify-end'
       )}
     >
       {isAI && (
-        <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center flex-shrink-0 mt-1">
-          <Shield className="w-5 h-5 text-primary-foreground" />
+        <div className="w-9 h-9 rounded-md bg-primary flex items-center justify-center flex-shrink-0 mt-1">
+          <span className="text-sm font-bold text-primary-foreground">AI</span>
         </div>
       )}
       <div
         className={cn(
           'max-w-3xl rounded-2xl px-5 py-3',
           isAI
-            ? 'bg-ai-message text-foreground'
-            : 'bg-user-message text-white'
+            ? 'bg-transparent text-foreground'
+            : 'bg-[hsl(0,0%,27%)] text-white'
         )}
       >
-        {isAI && (
-          <div className="flex items-center gap-2 mb-2">
-            <span className="text-xs font-semibold text-primary">AI</span>
-          </div>
-        )}
         <div className="text-sm leading-relaxed">{renderContent(message.content)}</div>
       </div>
+      {!isAI && (
+        <div className="w-9 h-9 rounded-md bg-[hsl(0,0%,27%)] flex items-center justify-center flex-shrink-0 mt-1">
+          <span className="text-sm font-semibold text-white">U</span>
+        </div>
+      )}
     </div>
   );
 };
