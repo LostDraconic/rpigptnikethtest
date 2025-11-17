@@ -138,14 +138,24 @@ export const useChatStore = create<ChatState>((set, get) => ({
   setCurrentConversation: (id) => set({ currentConversationId: id }),
   
   getCurrentMessages: () => {
-    const { conversationsByCourse, currentCourseId, currentConversationId, selectedTags } = get();
-    if (!currentCourseId || !currentConversationId) return [];
+    const { conversationsByCourse, currentCourseId, currentUserId, currentConversationId, selectedTags } = get();
+    if (!currentCourseId || !currentUserId || !currentConversationId) {
+      console.log('Cannot get messages: missing context', { currentCourseId, currentUserId, currentConversationId });
+      return [];
+    }
     
-    const conversations = conversationsByCourse[currentCourseId] || [];
+    const key = `${currentCourseId}-${currentUserId}`;
+    const conversations = conversationsByCourse[key] || [];
+    console.log('Getting messages with key:', key, 'found conversations:', conversations.length);
+    
     const conversation = conversations.find((c) => c.id === currentConversationId);
     
-    if (!conversation) return [];
+    if (!conversation) {
+      console.log('Conversation not found:', currentConversationId);
+      return [];
+    }
     
+    console.log('Found conversation with', conversation.messages.length, 'messages');
     let messages = conversation.messages;
     
     // Filter by tags if any selected
