@@ -57,6 +57,17 @@ export default {
           border: "hsl(var(--sidebar-border))",
           ring: "hsl(var(--sidebar-ring))",
         },
+        "chat-sidebar": {
+          bg: "hsl(var(--chat-sidebar-bg))",
+          fg: "hsl(var(--chat-sidebar-fg))",
+          hover: "hsl(var(--chat-sidebar-hover))",
+          active: "hsl(var(--chat-sidebar-active))",
+        },
+        "ai-message": "hsl(var(--ai-message-bg))",
+        "user-message": "hsl(var(--user-message-bg))",
+        "code-bg": "hsl(var(--code-bg))",
+        "badge-student": "hsl(var(--badge-student))",
+        "badge-professor": "hsl(var(--badge-professor))",
       },
       borderRadius: {
         lg: "var(--radius)",
