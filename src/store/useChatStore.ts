@@ -160,7 +160,15 @@ export const useChatStore = create<ChatState>((set, get) => ({
   
   addMessage: (message) => {
     const { conversationsByCourse, currentCourseId, currentUserId, currentConversationId } = get();
-    if (!currentCourseId || !currentUserId || !currentConversationId) return;
+    
+    if (!currentCourseId || !currentUserId || !currentConversationId) {
+      console.error('Cannot add message: missing context', {
+        currentCourseId,
+        currentUserId,
+        currentConversationId
+      });
+      return;
+    }
     
     const key = `${currentCourseId}-${currentUserId}`;
     const conversations = conversationsByCourse[key] || [];
@@ -176,6 +184,8 @@ export const useChatStore = create<ChatState>((set, get) => ({
           }
         : conv
     );
+    
+    console.log('Adding message to store:', { key, conversationId: currentConversationId, message });
     
     set((state) => ({
       conversationsByCourse: {
