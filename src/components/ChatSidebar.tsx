@@ -6,19 +6,30 @@ import { useCourseStore } from '@/store/useCourseStore';
 import { useAuthStore } from '@/store/useAuthStore';
 import { useNavigate } from 'react-router-dom';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { format } from 'date-fns';
 import { useState } from 'react';
+import { ConversationItem } from './ConversationItem';
 
 export const ChatSidebar = () => {
-  const { conversations, clearMessages, currentCourseId } = useChatStore();
+  const {
+    getConversations,
+    createConversation,
+    renameConversation,
+    deleteConversation,
+    currentConversationId,
+    setCurrentConversation,
+    currentCourseId,
+  } = useChatStore();
   const { selectedCourse } = useCourseStore();
   const { isProfessor } = useAuthStore();
   const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState('');
 
+  const conversations = currentCourseId ? getConversations(currentCourseId) : [];
+
   const handleNewChat = () => {
     if (currentCourseId) {
-      clearMessages(currentCourseId);
+      const newId = createConversation(currentCourseId);
+      setCurrentConversation(newId);
     }
   };
 
@@ -86,15 +97,16 @@ export const ChatSidebar = () => {
             </div>
           ) : (
             filteredConversations.map((conv) => (
-              <button
+              <ConversationItem
                 key={conv.id}
-                className="w-full text-left px-3 py-2 rounded hover:bg-chat-sidebar-hover transition-colors text-sm"
-              >
-                <div className="font-medium truncate">{conv.title}</div>
-                <div className="text-xs text-chat-sidebar-fg/60">
-                  {format(new Date(conv.lastMessage), 'MM/dd/yyyy')}
-                </div>
-              </button>
+                id={conv.id}
+                title={conv.title}
+                lastMessage={conv.lastMessage}
+                isActive={conv.id === currentConversationId}
+                onClick={() => setCurrentConversation(conv.id)}
+                onRename={(newTitle) => renameConversation(conv.id, newTitle)}
+                onDelete={() => deleteConversation(conv.id)}
+              />
             ))
           )}
         </div>
