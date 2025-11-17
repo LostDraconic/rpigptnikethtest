@@ -29,7 +29,7 @@ const ProfessorDashboard = () => {
       description: 'Explore available courses and materials',
       icon: BookOpen,
       onClick: () => navigate('/dashboard'),
-      color: 'bg-secondary',
+      color: 'bg-primary',
     },
   ];
 
