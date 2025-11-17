@@ -62,7 +62,7 @@ const UploadPage = () => {
           <Button
             variant="ghost"
             size="icon"
-            onClick={() => navigate(`/chat/${courseId}`)}
+            onClick={() => navigate('/professor/courses')}
           >
             <ArrowLeft className="w-5 h-5" />
           </Button>
