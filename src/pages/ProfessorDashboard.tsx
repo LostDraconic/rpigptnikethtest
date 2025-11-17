@@ -53,7 +53,7 @@ const ProfessorDashboard = () => {
             return (
               <Card
                 key={action.title}
-                className="p-6 cursor-pointer hover:shadow-lg transition-all hover:border-primary/50 group"
+                className="p-6 cursor-pointer hover:shadow-lg transition-all hover:border-primary/50 hover:scale-105 group"
                 onClick={action.onClick}
               >
                 <div className="flex flex-col items-center text-center space-y-4">

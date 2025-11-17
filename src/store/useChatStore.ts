@@ -15,27 +15,45 @@ export interface Conversation {
 }
 
 interface ChatState {
-  messages: Message[];
+  messagesByCourse: Record<string, Message[]>;
   conversations: Conversation[];
   currentConversationId: string | null;
+  currentCourseId: string | null;
   isStreaming: boolean;
-  setMessages: (messages: Message[]) => void;
-  addMessage: (message: Message) => void;
+  getMessages: (courseId: string) => Message[];
+  setMessages: (courseId: string, messages: Message[]) => void;
+  addMessage: (courseId: string, message: Message) => void;
   setConversations: (conversations: Conversation[]) => void;
   setCurrentConversation: (id: string) => void;
+  setCurrentCourse: (courseId: string) => void;
   setIsStreaming: (isStreaming: boolean) => void;
-  clearMessages: () => void;
+  clearMessages: (courseId: string) => void;
 }
 
-export const useChatStore = create<ChatState>((set) => ({
-  messages: [],
+export const useChatStore = create<ChatState>((set, get) => ({
+  messagesByCourse: {},
   conversations: [],
   currentConversationId: null,
+  currentCourseId: null,
   isStreaming: false,
-  setMessages: (messages) => set({ messages }),
-  addMessage: (message) => set((state) => ({ messages: [...state.messages, message] })),
+  getMessages: (courseId) => get().messagesByCourse[courseId] || [],
+  setMessages: (courseId, messages) => 
+    set((state) => ({ 
+      messagesByCourse: { ...state.messagesByCourse, [courseId]: messages } 
+    })),
+  addMessage: (courseId, message) => 
+    set((state) => ({ 
+      messagesByCourse: { 
+        ...state.messagesByCourse, 
+        [courseId]: [...(state.messagesByCourse[courseId] || []), message] 
+      } 
+    })),
   setConversations: (conversations) => set({ conversations }),
   setCurrentConversation: (id) => set({ currentConversationId: id }),
+  setCurrentCourse: (courseId) => set({ currentCourseId: courseId }),
   setIsStreaming: (isStreaming) => set({ isStreaming }),
-  clearMessages: () => set({ messages: [] }),
+  clearMessages: (courseId) => 
+    set((state) => ({ 
+      messagesByCourse: { ...state.messagesByCourse, [courseId]: [] } 
+    })),
 }));

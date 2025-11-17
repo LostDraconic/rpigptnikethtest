@@ -15,14 +15,17 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 const ChatPage = () => {
   const { courseId } = useParams<{ courseId: string }>();
   const navigate = useNavigate();
-  const { messages, addMessage, setMessages, setConversations, isStreaming, setIsStreaming } = useChatStore();
+  const { getMessages, addMessage, setMessages, setConversations, setCurrentCourse, isStreaming, setIsStreaming } = useChatStore();
   const { selectCourse, selectedCourse } = useCourseStore();
   const [loading, setLoading] = useState(true);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
+  const messages = courseId ? getMessages(courseId) : [];
+
   useEffect(() => {
     if (courseId) {
       loadCourseData(courseId);
+      setCurrentCourse(courseId);
     }
   }, [courseId]);
 
@@ -60,12 +63,12 @@ const ChatPage = () => {
       timestamp: new Date(),
     };
 
-    addMessage(userMessage);
+    addMessage(courseId, userMessage);
     setIsStreaming(true);
 
     try {
       const response = await sendMessage(courseId, content);
-      addMessage(response);
+      addMessage(courseId, response);
     } catch (error) {
       console.error('Failed to send message:', error);
     } finally {

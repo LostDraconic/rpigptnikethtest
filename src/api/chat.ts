@@ -51,6 +51,9 @@ export const streamMessage = async (
   message: string,
   onToken: (token: string) => void
 ): Promise<void> => {
+  // Initial delay before streaming starts
+  await delay(800);
+  
   const response =
     mockResponses[Math.floor(Math.random() * mockResponses.length)];
   const words = response.split(' ');

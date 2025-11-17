@@ -13,7 +13,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 
 export const Header = () => {
-  const { user, logout } = useAuthStore();
+  const { user, logout, isProfessor } = useAuthStore();
   const navigate = useNavigate();
 
   const handleLogout = () => {
@@ -21,14 +21,25 @@ export const Header = () => {
     navigate('/login');
   };
 
+  const handleLogoClick = () => {
+    if (isProfessor()) {
+      navigate('/professor');
+    } else {
+      navigate('/dashboard');
+    }
+  };
+
   if (!user) return null;
 
   return (
     <header className="h-16 border-b bg-background px-6 flex items-center justify-between">
-      <div className="flex items-center gap-3">
+      <button 
+        onClick={handleLogoClick}
+        className="flex items-center gap-3 hover:opacity-80 transition-opacity cursor-pointer"
+      >
         <Shield className="w-8 h-8 text-primary" />
         <h1 className="text-2xl font-bold text-primary">RPI GPT</h1>
-      </div>
+      </button>
 
       <DropdownMenu>
         <DropdownMenuTrigger asChild>

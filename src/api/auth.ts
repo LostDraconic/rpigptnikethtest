@@ -3,7 +3,7 @@ import { User, UserRole } from '@/store/useAuthStore';
 const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
 export const loginWithSSO = async (role: UserRole): Promise<User> => {
-  await delay(1000);
+  await delay(1200);
 
   const mockUsers: Record<UserRole, User> = {
     student: {

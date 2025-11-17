@@ -8,13 +8,15 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { format } from 'date-fns';
 
 export const ChatSidebar = () => {
-  const { conversations, clearMessages } = useChatStore();
+  const { conversations, clearMessages, currentCourseId } = useChatStore();
   const { selectedCourse } = useCourseStore();
   const { isProfessor } = useAuthStore();
   const navigate = useNavigate();
 
   const handleNewChat = () => {
-    clearMessages();
+    if (currentCourseId) {
+      clearMessages(currentCourseId);
+    }
   };
 
   const handleUpload = () => {
@@ -24,7 +26,7 @@ export const ChatSidebar = () => {
   };
 
   return (
-    <div className="w-64 bg-chat-sidebar-bg text-chat-sidebar-fg flex flex-col h-full border-r border-chat-sidebar-hover">
+    <div className="w-64 bg-chat-sidebar-bg text-chat-sidebar-fg flex flex-col h-screen border-r border-chat-sidebar-hover">
       <div className="p-4 space-y-2">
         <Button
           onClick={handleNewChat}

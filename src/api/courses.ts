@@ -2,7 +2,7 @@ import { Course } from '@/store/useCourseStore';
 
 const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
-const mockCourses: Course[] = [
+let mockCourses: Course[] = [
   {
     id: 'csci-1100',
     code: 'CSCI 1100',
@@ -24,7 +24,7 @@ const mockCourses: Course[] = [
     id: 'math-1010',
     code: 'MATH 1010',
     name: 'Calculus I',
-    department: 'Mathematics',
+    department: 'Mathematical Sciences',
     professor: 'Dr. Williams',
     semester: 'Fall 2025',
   },
@@ -32,7 +32,7 @@ const mockCourses: Course[] = [
     id: 'phys-1100',
     code: 'PHYS 1100',
     name: 'Physics I',
-    department: 'Physics',
+    department: 'Physics, Applied Physics, and Astronomy',
     professor: 'Dr. Brown',
     semester: 'Fall 2025',
   },
@@ -40,7 +40,7 @@ const mockCourses: Course[] = [
     id: 'engr-1600',
     code: 'ENGR 1600',
     name: 'Introduction to Engineering',
-    department: 'Engineering',
+    department: 'Mechanical, Aerospace, and Nuclear Engineering',
     professor: 'Dr. Davis',
     semester: 'Fall 2025',
   },
@@ -72,6 +72,8 @@ export const createCourse = async (courseData: Omit<Course, 'id'>): Promise<Cour
     ...courseData,
     id: `course-${Date.now()}`,
   };
+  // Add to the mock courses array so it persists
+  mockCourses.push(newCourse);
   return newCourse;
 };
 

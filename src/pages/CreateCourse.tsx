@@ -34,12 +34,28 @@ const CreateCourse = () => {
   });
 
   const departments = [
+    'Biomedical Engineering',
+    'Chemical and Biological Engineering',
+    'Civil and Environmental Engineering',
+    'Electrical, Computer, and Systems Engineering',
+    'Industrial and Systems Engineering',
+    'Materials Science and Engineering',
+    'Mechanical, Aerospace, and Nuclear Engineering',
+    'Biological Sciences',
+    'Chemistry and Chemical Biology',
     'Computer Science',
-    'Mathematics',
-    'Physics',
-    'Engineering',
-    'Chemistry',
-    'Biology',
+    'Earth and Environmental Sciences',
+    'Mathematical Sciences',
+    'Physics, Applied Physics, and Astronomy',
+    'Arts',
+    'Cognitive Science',
+    'Communication and Media',
+    'Economics',
+    'Games and Simulation Arts and Sciences',
+    'Science and Technology Studies',
+    'Architecture',
+    'Lighting (Graduate program)',
+    'Business / Management Programs (Lally)',
   ];
 
   const semesters = ['Fall 2025', 'Spring 2026', 'Summer 2026'];
