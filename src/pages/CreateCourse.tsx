@@ -31,7 +31,11 @@ const CreateCourse = () => {
     semester: '',
     description: '',
     tags: '',
+    officeHours: '',
+    textbooks: '',
   });
+  const [announcements, setAnnouncements] = useState<{ title: string; date: string }[]>([]);
+  const [newAnnouncement, setNewAnnouncement] = useState({ title: '', date: '' });
 
   const departments = [
     'Biomedical Engineering',
@@ -69,6 +73,8 @@ const CreateCourse = () => {
         ...formData,
         professor: 'Dr. Smith', // Would come from auth in real app
         tags: formData.tags ? formData.tags.split(',').map((t) => t.trim()) : [],
+        textbooks: formData.textbooks ? formData.textbooks.split('\n').map((t) => t.trim()).filter(Boolean) : [],
+        announcements,
       });
 
       addCourse(newCourse);
@@ -208,6 +214,78 @@ const CreateCourse = () => {
                   setFormData({ ...formData, tags: e.target.value })
                 }
               />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="officeHours">Office Hours</Label>
+              <Input
+                id="officeHours"
+                placeholder="e.g., Tuesday & Thursday, 2:00 PM - 4:00 PM"
+                value={formData.officeHours}
+                onChange={(e) =>
+                  setFormData({ ...formData, officeHours: e.target.value })
+                }
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="textbooks">Required Textbooks (one per line)</Label>
+              <Textarea
+                id="textbooks"
+                placeholder="e.g., Introduction to Algorithms (3rd Edition)"
+                value={formData.textbooks}
+                onChange={(e) =>
+                  setFormData({ ...formData, textbooks: e.target.value })
+                }
+                rows={3}
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label>Announcements</Label>
+              <div className="space-y-2">
+                {announcements.map((ann, index) => (
+                  <div key={index} className="flex items-center gap-2 p-2 bg-muted rounded">
+                    <div className="flex-1">
+                      <p className="text-sm font-medium">{ann.title}</p>
+                      <p className="text-xs text-muted-foreground">{ann.date}</p>
+                    </div>
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => setAnnouncements(announcements.filter((_, i) => i !== index))}
+                    >
+                      Remove
+                    </Button>
+                  </div>
+                ))}
+                <div className="flex gap-2">
+                  <Input
+                    placeholder="Announcement title"
+                    value={newAnnouncement.title}
+                    onChange={(e) => setNewAnnouncement({ ...newAnnouncement, title: e.target.value })}
+                  />
+                  <Input
+                    type="date"
+                    value={newAnnouncement.date}
+                    onChange={(e) => setNewAnnouncement({ ...newAnnouncement, date: e.target.value })}
+                    className="w-40"
+                  />
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={() => {
+                      if (newAnnouncement.title && newAnnouncement.date) {
+                        setAnnouncements([...announcements, newAnnouncement]);
+                        setNewAnnouncement({ title: '', date: '' });
+                      }
+                    }}
+                  >
+                    Add
+                  </Button>
+                </div>
+              </div>
             </div>
 
             <div className="flex gap-3 pt-4">

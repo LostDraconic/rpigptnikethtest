@@ -9,6 +9,9 @@ export interface Course {
   semester?: string;
   description?: string;
   tags?: string[];
+  officeHours?: string;
+  textbooks?: string[];
+  announcements?: { title: string; date: string }[];
 }
 
 interface CourseState {

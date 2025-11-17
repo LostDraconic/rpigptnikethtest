@@ -18,17 +18,19 @@ export const ChatSidebar = () => {
     currentConversationId,
     setCurrentConversation,
     currentCourseId,
+    setCurrentUser,
   } = useChatStore();
   const { selectedCourse } = useCourseStore();
-  const { isProfessor } = useAuthStore();
+  const { isProfessor, user } = useAuthStore();
   const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState('');
 
-  const conversations = currentCourseId ? getConversations(currentCourseId) : [];
+  const conversations = currentCourseId && user ? getConversations(currentCourseId, user.id) : [];
 
   const handleNewChat = () => {
-    if (currentCourseId) {
-      const newId = createConversation(currentCourseId);
+    if (currentCourseId && user) {
+      setCurrentUser(user.id);
+      const newId = createConversation(currentCourseId, user.id);
       setCurrentConversation(newId);
     }
   };

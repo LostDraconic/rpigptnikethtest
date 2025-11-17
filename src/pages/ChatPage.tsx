@@ -6,6 +6,7 @@ import { ChatMessage } from '@/components/ChatMessage';
 import { ChatInput } from '@/components/ChatInput';
 import { useChatStore, Message } from '@/store/useChatStore';
 import { useCourseStore } from '@/store/useCourseStore';
+import { useAuthStore } from '@/store/useAuthStore';
 import {
   sendMessage,
   regenerateMessage,
@@ -38,6 +39,7 @@ const ChatPage = () => {
     setCurrentCourse,
     createConversation,
     setCurrentConversation,
+    setCurrentUser,
     currentConversationId,
     isStreaming,
     setIsStreaming,
@@ -46,6 +48,7 @@ const ChatPage = () => {
     getPinnedMessages,
   } = useChatStore();
   const { selectCourse, selectedCourse } = useCourseStore();
+  const { user } = useAuthStore();
   const [loading, setLoading] = useState(true);
   const [showPinned, setShowPinned] = useState(false);
   const [showCourseInfo, setShowCourseInfo] = useState(false);
@@ -56,17 +59,18 @@ const ChatPage = () => {
   const pinnedMessages = getPinnedMessages();
 
   useEffect(() => {
-    if (courseId) {
+    if (courseId && user) {
       loadCourseData(courseId);
       setCurrentCourse(courseId);
+      setCurrentUser(user.id);
       
       // Create initial conversation if none exists
       if (!currentConversationId) {
-        const newId = createConversation(courseId);
+        const newId = createConversation(courseId, user.id);
         setCurrentConversation(newId);
       }
     }
-  }, [courseId]);
+  }, [courseId, user?.id]);
 
   useEffect(() => {
     scrollToBottom();
@@ -240,7 +244,6 @@ const ChatPage = () => {
           <div className="h-16 border-b px-6 flex items-center justify-between bg-background">
             <div className="flex items-baseline gap-3">
               <h2 className="font-bold text-xl">{selectedCourse.code}</h2>
-              <span className="text-lg text-muted-foreground">•</span>
               <h3 className="font-semibold text-lg">{selectedCourse.name}</h3>
             </div>
             <p className="text-sm text-muted-foreground">{selectedCourse.professor}</p>
