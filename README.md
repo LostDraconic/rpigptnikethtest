@@ -1,73 +1,130 @@
-# Welcome to your Lovable project
+# **RPI GPT – Frontend by Niketh Nallamolu**
 
-## Project info
+## **Core Technologies**
+- React + Vite  
+- Chakra UI (RPI theme)  
+- Framer Motion animations  
+- Zustand state management  
+- Responsive design  
+- Markdown + Syntax highlighting  
 
-**URL**: https://lovable.dev/projects/928f1af4-ca20-43fb-828b-421f36d809c3
+---
 
-## How can I edit this code?
+## **Authentication & Roles**
+- **RPI CAS/SSO login**  
+- **Student** and **Teacher** roles with protected routes  
 
-There are several ways of editing your application.
+---
 
-**Use Lovable**
+## **Main App Views**
+### **Student Dashboard**
+- Course search & filter  
+- Recent chats  
+- Student uploads  
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/928f1af4-ca20-43fb-828b-421f36d809c3) and start prompting.
+### **Teacher Dashboard**
+- Manage courses  
+- Upload textbooks/PDFs/slides  
+- Edit course info  
 
-Changes made via Lovable will be committed automatically to this repo.
+### **Course Chat Page**
+- ChatGPT-style interface  
+- Streaming responses  
+- Typing indicator animation  
 
-**Use your preferred IDE**
+### **File Upload Page (Teacher)**
+- Drag-and-drop  
+- File previews  
+- Visibility toggles  
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+### **Course Creation Page**
+- Course name  
+- Course code  
+- Department  
+- Semester  
+- Tags  
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+---
 
-Follow these steps:
+## **Advanced Chat Features**
+### **Multi-Conversation Support**
+- New chat  
+- Rename chat  
+- Delete chat  
+- Sidebar conversation list  
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+### **Rich Message Support**
+- Images  
+- Code blocks  
+- Tables  
+- Embedded PDFs  
+- Built-in quick actions  
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+### **Response Enhancements**
+- Auto-collapse long answers  
+- Regenerate response  
+- Improve answer  
+- Copy-to-clipboard  
 
-# Step 3: Install the necessary dependencies.
-npm i
+### **Tagging System**
+Tag messages as:  
+- Homework  
+- Definition  
+- Formula  
+- Exam  
+- Important  
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
-```
+Filter chat by tag.
 
-**Edit a file directly in GitHub**
+### **Auto-Summarize Functions**
+- Summarize entire chat  
+- Turn into study notes  
+- Step-by-step mode  
+- Lecture mode summary  
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+### **Pinned Messages Drawer**
+- Save key explanations  
+- Save formulas  
+- Save AI summaries  
 
-**Use GitHub Codespaces**
+### **Course Info Sidebar**
+- Course code  
+- Professor name  
+- Office hours  
+- Textbooks  
+- Uploaded files  
+- Announcements  
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+---
 
-## What technologies are used for this project?
+## **Upload & File Management**
+- PDF thumbnails + previews  
+- Rename, delete, visibility options  
+- Multi-file drag-and-drop  
+- Upload progress UI  
 
-This project is built with:
+---
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+## **UI/UX Enhancements**
+- Dark mode toggle  
+- Smooth transitions  
+- Auto-scroll  
+- Error states  
+- Toast notifications  
+- Upload confirmations  
 
-## How can I deploy this project?
+---
 
-Simply open [Lovable](https://lovable.dev/projects/928f1af4-ca20-43fb-828b-421f36d809c3) and click on Share -> Publish.
+## **Frontend Integration Hooks**
+- Ask questions  
+- Stream answers  
+- Fetch course list  
+- Upload files  
+- Retrieve chat history  
+- Fetch logs  
+- Inject teacher materials  
 
-## Can I connect a custom domain to my Lovable project?
+---
 
-Yes, you can!
-
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
-
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+## **Summary**
+A polished, RPI-themed web application with full student & teacher flows, advanced AI chat functionality, rich course tools, and complete UI/UX features.
