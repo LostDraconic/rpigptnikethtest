@@ -1,73 +1,105 @@
-# Welcome to your Lovable project
+# RPI GPT — Intelligent Course Assistant
 
-## Project info
+**An AI-powered academic assistant built for students and professors at Rensselaer Polytechnic Institute (RPI).**
 
-**URL**: https://lovable.dev/projects/928f1af4-ca20-43fb-828b-421f36d809c3
+RPI GPT is a course-focused AI platform designed to make learning more accessible, organized, and personalized. By bringing course materials, AI-powered conversations, and study tools into one centralized interface, RPI GPT aims to help students better understand academic content while giving professors tools to manage their courses.
 
-## How can I edit this code?
+## Features
 
-There are several ways of editing your application.
+### Student Experience
+- **Course Dashboard:** Browse, search, and access courses through a centralized dashboard.
+- **AI Course Assistant:** Interact with an AI chatbot designed to provide course-specific academic support.
+- **Conversation Management:** Create, search, and organize conversations for individual courses.
+- **Study Tools:** Access interfaces for AI-generated study notes and conversation summaries.
+- **Organization:** Filter conversations by tags and access pinned content.
+- **Personalized Interface:** Navigate between enrolled courses and switch between light and dark themes.
 
-**Use Lovable**
+### Professor Experience
+- **Course Creation:** Configure courses with custom codes, descriptions, departments, semesters, and tags.
+- **Course Organization:** Manage course information through a dedicated professor interface.
+- **Academic Customization:** Configure course-specific information, including office hours and instructional details.
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/928f1af4-ca20-43fb-828b-421f36d809c3) and start prompting.
+### Authentication
+- Dedicated student and professor sign-in interfaces.
+- Designed for integration with RPI's Central Authentication Service (CAS).
+- Role-based experiences for students and faculty.
 
-Changes made via Lovable will be committed automatically to this repo.
+## Technology Stack
 
-**Use your preferred IDE**
+RPI GPT is developed using modern web technologies to support a responsive, maintainable, and scalable application.
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+| Technology | Purpose |
+|---|---|
+| React | Component-based user interface |
+| TypeScript | Type-safe application development |
+| Vite | Development server and build tooling |
+| Tailwind CSS | Responsive styling and design |
+| shadcn/ui | Reusable and accessible UI components |
+| Lovable | AI-assisted development and prototyping |
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+## Getting Started
 
-Follow these steps:
+### Prerequisites
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+Ensure you have the following installed:
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+- Node.js
+- npm
+- Git
 
-# Step 3: Install the necessary dependencies.
-npm i
+### Local Development
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
-```
+**1. Clone the repository**
 
-**Edit a file directly in GitHub**
+`git clone <YOUR_GIT_URL>`
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+**2. Navigate into the project**
 
-**Use GitHub Codespaces**
+`cd <YOUR_PROJECT_NAME>`
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+**3. Install dependencies**
 
-## What technologies are used for this project?
+`npm install`
 
-This project is built with:
+**4. Start the development server**
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+`npm run dev`
 
-## How can I deploy this project?
+Open the local URL displayed in your terminal to access the application.
 
-Simply open [Lovable](https://lovable.dev/projects/928f1af4-ca20-43fb-828b-421f36d809c3) and click on Share -> Publish.
+## Project Development
 
-## Can I connect a custom domain to my Lovable project?
+RPI GPT can be developed through several workflows.
 
-Yes, you can!
+**Local Development**
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+Clone the repository, make changes using your preferred IDE, and push updates through Git.
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+**GitHub Codespaces**
+
+Launch a GitHub Codespace directly from the repository to develop and test the application in a cloud-based environment.
+
+## Deployment
+
+The application can be deployed directly through Lovable:
+
+1. Open the RPI GPT project in Lovable.
+2. Select **Share → Publish**.
+3. Configure the deployment settings.
+4. Publish the application.
+
+Custom domains can be configured under **Project → Settings → Domains**.
+
+## Project Vision
+
+RPI GPT aims to create a more connected academic experience by combining artificial intelligence with course-specific educational resources.
+
+The long-term vision is to provide an intelligent learning environment where students can receive personalized academic assistance, professors can organize course content, and AI-powered tools can support more effective studying.
+
+## Disclaimer
+
+RPI GPT is a student-developed project intended to support academic learning. It is not an official RPI service unless separately authorized by the institution.
+
+---
+
+**RPI GPT | Building smarter tools for education.**
